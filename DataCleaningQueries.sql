@@ -4,110 +4,112 @@ Data Cleaning Queries
 
 */
 
---Select *
---From [Portfolio Project]..NashvilleHousing
+Select *
+From [Portfolio Project]..NashvilleHousing
 
 ------------------------------------------------------------------------------------------------------------------
 
 -------------------- Format SaleDate Column --------------------
 
---Select SaleDate
---From [Portfolio Project]..NashvilleHousing
+Select SaleDate
+From [Portfolio Project]..NashvilleHousing
 
---Alter table NashvilleHousing
---Add SaleDateConverted Date;
+Alter table NashvilleHousing
+Add SaleDateConverted Date;
 
---Update NashvilleHousing 
---SET SaleDateConverted = Convert(Date,SaleDate)
+Update NashvilleHousing 
+SET SaleDateConverted = Convert(Date,SaleDate)
 
---Select SaleDateConverted
---From [Portfolio Project]..NashvilleHousing
+Select SaleDateConverted
+From [Portfolio Project]..NashvilleHousing
 
 ------------------------------------------------------------------------------------------------------------------
 
 -------------------- Populate Property Address Data --------------------
 
 -- Determine null values
---Select  a.ParcelID as ap, a.PropertyAddress as apa,  b.ParcelID as bp, b.PropertyAddress as bpa, ISNULL(a.PropertyAddress,b.PropertyAddress)
---From [Portfolio Project]..NashvilleHousing a
---Join [Portfolio Project]..NashvilleHousing b
---	on a.ParcelID=b.ParcelID
---	And a.[UniqueID ]<>b.[UniqueID ]
---where a.PropertyAddress is null
+
+Select  a.ParcelID as ap, a.PropertyAddress as apa,  b.ParcelID as bp, b.PropertyAddress as bpa, ISNULL(a.PropertyAddress,b.PropertyAddress)
+From [Portfolio Project]..NashvilleHousing a
+Join [Portfolio Project]..NashvilleHousing b
+	on a.ParcelID=b.ParcelID
+	And a.[UniqueID ]<>b.[UniqueID ]
+where a.PropertyAddress is null
 
 
 ---- Repopulate null values of Property address column
---Update a
---SET PropertyAddress = ISNULL(a.PropertyAddress,b.PropertyAddress)
---From [Portfolio Project]..NashvilleHousing a
---Join [Portfolio Project]..NashvilleHousing b
---	on a.ParcelID=b.ParcelID
---	And a.[UniqueID ]<>b.[UniqueID ]
---where a.PropertyAddress is null
+
+Update a
+SET PropertyAddress = ISNULL(a.PropertyAddress,b.PropertyAddress)
+From [Portfolio Project]..NashvilleHousing a
+Join [Portfolio Project]..NashvilleHousing b
+	on a.ParcelID=b.ParcelID
+	And a.[UniqueID ]<>b.[UniqueID ]
+where a.PropertyAddress is null
 
 ------------------------------------------------------------------------------------------------------------------
 
 -------------------- Formatting Property Address into indiviual columns (Address, City, State) --------------------
 
---Select 
---SUBSTRING(PropertyAddress, 1, CHARINDEX(',',PropertyAddress)-1) as Address,
---SUBSTRING(PropertyAddress, CHARINDEX(',',PropertyAddress)+1, Len(PropertyAddress)) as City
---From [Portfolio Project]..NashvilleHousing
+Select 
+SUBSTRING(PropertyAddress, 1, CHARINDEX(',',PropertyAddress)-1) as Address,
+SUBSTRING(PropertyAddress, CHARINDEX(',',PropertyAddress)+1, Len(PropertyAddress)) as City
+From [Portfolio Project]..NashvilleHousing
 
---Alter Table NashvilleHousing
---ADD PropertyAddressOnly nvarchar(255);
+Alter Table NashvilleHousing
+ADD PropertyAddressOnly nvarchar(255);
 
---Update NashvilleHousing
---SET PropertyAddressOnly = SUBSTRING(PropertyAddress, 1, CHARINDEX(',',PropertyAddress)-1);
+Update NashvilleHousing
+SET PropertyAddressOnly = SUBSTRING(PropertyAddress, 1, CHARINDEX(',',PropertyAddress)-1);
 
---Alter Table NashvilleHousing
---ADD PropertyCityOnly nvarchar(255);
+Alter Table NashvilleHousing
+ADD PropertyCityOnly nvarchar(255);
 
---Update NashvilleHousing
---SET PropertyCityOnly = SUBSTRING(PropertyAddress, CHARINDEX(',',PropertyAddress)+1, Len(PropertyAddress));
+Update NashvilleHousing
+SET PropertyCityOnly = SUBSTRING(PropertyAddress, CHARINDEX(',',PropertyAddress)+1, Len(PropertyAddress));
 
---Select PropertyAddressOnly, PropertyCityOnly
---From [Portfolio Project]..NashvilleHousing
+Select PropertyAddressOnly, PropertyCityOnly
+From [Portfolio Project]..NashvilleHousing
 
 
 ------------------------------------------------------------------------------------------------------------------
 
 -------------------- Formatting Property Address into indiviual columns (Address, City, State) --------------------
 
---Select 
---PARSENAME(REPLACE(OwnerAddress, ',' , '.'),3),
---PARSENAME(REPLACE(OwnerAddress, ',' , '.'),2),
---PARSENAME(REPLACE(OwnerAddress, ',' , '.'),1)
---From [Portfolio Project]..NashvilleHousing
+Select 
+PARSENAME(REPLACE(OwnerAddress, ',' , '.'),3),
+PARSENAME(REPLACE(OwnerAddress, ',' , '.'),2),
+PARSENAME(REPLACE(OwnerAddress, ',' , '.'),1)
+From [Portfolio Project]..NashvilleHousing
 
---Alter Table NashvilleHousing
---ADD OwnerAddressOnly nvarchar(255);
+Alter Table NashvilleHousing
+ADD OwnerAddressOnly nvarchar(255);
 
---Update NashvilleHousing
---SET OwnerAddressOnly = PARSENAME(REPLACE(OwnerAddress, ',' , '.'),3)
+Update NashvilleHousing
+SET OwnerAddressOnly = PARSENAME(REPLACE(OwnerAddress, ',' , '.'),3)
 
---Alter Table NashvilleHousing
---ADD OwnerCityOnly nvarchar(255);
+Alter Table NashvilleHousing
+ADD OwnerCityOnly nvarchar(255);
 
---Update NashvilleHousing
---SET OwnerCityOnly = PARSENAME(REPLACE(OwnerAddress, ',' , '.'),2)
+Update NashvilleHousing
+SET OwnerCityOnly = PARSENAME(REPLACE(OwnerAddress, ',' , '.'),2)
 
---Alter Table NashvilleHousing
---ADD OwnerStateOnly nvarchar(255);
+Alter Table NashvilleHousing
+ADD OwnerStateOnly nvarchar(255);
 
---Update NashvilleHousing
---SET OwnerStateOnly = PARSENAME(REPLACE(OwnerAddress, ',' , '.'),1)
+Update NashvilleHousing
+SET OwnerStateOnly = PARSENAME(REPLACE(OwnerAddress, ',' , '.'),1)
 
---Select OwnerAddressOnly, OwnerCityOnly, OwnerStateOnly
---From [Portfolio Project]..NashvilleHousing
+Select OwnerAddressOnly, OwnerCityOnly, OwnerStateOnly
+From [Portfolio Project]..NashvilleHousing
 
 ------------------------------------------------------------------------------------------------------------------
 
 
 -------------------- Change Y and N to Yes and No	in "Sold as Vacant" field --------------------
 
---Select Distinct(SoldAsVacant), Count(SoldAsVacant) as valueCount
---From [Portfolio Project]..NashvilleHousing
+Select Distinct(SoldAsVacant), Count(SoldAsVacant) as valueCount
+From [Portfolio Project]..NashvilleHousing
 --Group by SoldAsVacant
 --Order by 2
 
