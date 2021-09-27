@@ -110,22 +110,22 @@ From [Portfolio Project]..NashvilleHousing
 
 Select Distinct(SoldAsVacant), Count(SoldAsVacant) as valueCount
 From [Portfolio Project]..NashvilleHousing
---Group by SoldAsVacant
---Order by 2
+Group by SoldAsVacant
+Order by 2
 
 
---Select SoldAsVacant ,
---Case When SoldAsVacant = 'Y' Then 'Yes'
---	 When SoldAsVacant = 'N' Then 'No'
---	 Else SoldAsVacant
---End
---From [Portfolio Project]..NashvilleHousing
+Select SoldAsVacant ,
+Case When SoldAsVacant = 'Y' Then 'Yes'
+	 When SoldAsVacant = 'N' Then 'No'
+	 Else SoldAsVacant
+End
+From [Portfolio Project]..NashvilleHousing
 
---Update NashvilleHousing
---SET SoldAsVacant =  Case When SoldAsVacant = 'Y' Then 'Yes'
---						 When SoldAsVacant = 'N' Then 'No'
---						 Else SoldAsVacant
---					End
+Update NashvilleHousing
+SET SoldAsVacant =  Case When SoldAsVacant = 'Y' Then 'Yes'
+						 When SoldAsVacant = 'N' Then 'No'
+						 Else SoldAsVacant
+					End
 
 
 
@@ -134,37 +134,39 @@ From [Portfolio Project]..NashvilleHousing
 -------------------- Remove Duplicate Values --------------------
 
 -- Find Duplicate Data with CTE
---WITH ROWNUMCTE AS(
---Select *,
---ROW_NUMBER() OVER(
---PARTITION BY ParcelID, PropertyAddress, SalePrice, SaleDate, LegalReference
---Order by UniqueID
---) row_num
---From [Portfolio Project]..NashvilleHousing
-----Order by ParcelID 
---)
---Select *
---From ROWNUMCTE
---Where row_num > 1
 
----- Delete Data from CTE
---WITH ROWNUMCTE AS(
---Select *,
---ROW_NUMBER() OVER(
---PARTITION BY ParcelID, PropertyAddress, SalePrice, SaleDate, LegalReference
---Order by UniqueID
---) row_num
---From [Portfolio Project]..NashvilleHousing
-----Order by ParcelID 
---)
---DELETE
---From ROWNUMCTE
---Where row_num > 1
+WITH ROWNUMCTE AS(
+Select *,
+ROW_NUMBER() OVER(
+PARTITION BY ParcelID, PropertyAddress, SalePrice, SaleDate, LegalReference
+Order by UniqueID
+) row_num
+From [Portfolio Project]..NashvilleHousing
+--Order by ParcelID 
+)
+Select *
+From ROWNUMCTE
+Where row_num > 1
+
+-- Delete Data from CTE
+
+WITH ROWNUMCTE AS(
+Select *,
+ROW_NUMBER() OVER(
+PARTITION BY ParcelID, PropertyAddress, SalePrice, SaleDate, LegalReference
+Order by UniqueID
+) row_num
+From [Portfolio Project]..NashvilleHousing
+--Order by ParcelID 
+)
+DELETE
+From ROWNUMCTE
+Where row_num > 1
 
 
 ------------------------------------------------------------------------------------------------------------------
 
 -------------------- Delete Unused Columns --------------------
 
---Alter table NashvilleHousing
---Drop column OwnerAddress, TaxDistrict, PropertyAddress, SaleDate
+Alter table NashvilleHousing
+Drop column OwnerAddress, TaxDistrict, PropertyAddress, SaleDate
